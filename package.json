@@ -1,0 +1,60 @@
+{
+  "name": "ts-evmos-signer",
+  "version": "0.1.0",
+  "description": "Typescript signer to sign evmosjs messages",
+  "main": "index.js",
+  "license": "MIT",
+  "private": "false",
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "Guillermo Paoletti <guillermo.paoletti@gmail.com>",
+  "repository": "https://github.com/hanchon-live/ts-evmos-signer",
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix"
+    ],
+    "*.md": [
+      "yarn format:md"
+    ]
+  },
+  "scripts": {
+    "test": "jest",
+    "prepare": "husky install",
+    "lint": "eslint -c './.eslintrc.js' './packages/**/*.{ts,js}'",
+    "lint:ci": "yarn lint . --format junit",
+    "lint:md": "markdownlint --ignore node_modules --ignore .git",
+    "format": "yarn lint --fix",
+    "format:md": "yarn lint:md --fix"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^16.2.0",
+    "@commitlint/config-conventional": "^16.2.1",
+    "@types/jest": "^27.0.1",
+    "@types/node": "^16.9.2",
+    "@typescript-eslint/eslint-plugin": "^4.31.1",
+    "@typescript-eslint/parser": "^4.31.1",
+    "cross-env": "^7.0.3",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-typescript": "^2.5.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-jest": "^24.4.2",
+    "eslint-plugin-markdown": "^2.2.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.4",
+    "jest": "^27.5.1",
+    "jest-junit": "^13.0.0",
+    "link-module-alias": "^1.2.0",
+    "lint-staged": "^11.1.2",
+    "markdownlint-cli": "^0.31.1",
+    "prettier": "^2.4.1",
+    "shx": "^0.3.4",
+    "ts-jest": "^27.0.5",
+    "ts-node-dev": "^1.1.8",
+    "tsconfig-paths": "^3.11.0",
+    "typescript": "^4.4.3"
+  }
+}

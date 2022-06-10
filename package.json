@@ -1,6 +1,6 @@
 {
   "name": "@hanchon/evmos-ts-wallet",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Evmos ts/js wallet to sign and broadcast messages created with evmosjs",
   "repository": "hanchon-live/evmos-ts-wallet",
   "source": "src/signer.ts",

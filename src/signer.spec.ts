@@ -1,6 +1,5 @@
 import { Wallet } from '@ethersproject/wallet'
 import { createMessageSend } from '@tharsis/transactions'
-import { ethToEvmos } from '@tharsis/address-converter'
 import {
   broadcast,
   getSender,
@@ -13,15 +12,15 @@ import {
 // The block flag is required so the account sequence is updated between tests
 
 jest.setTimeout(60 * 60 * 10000)
-// NOTE: this tests requires that the address has founds and has already sent al least 1 transaction
+
+// NOTE: this tests requires that the address has coins
 describe('send transactions to the node', () => {
   it('simple send using EIP712', async () => {
     const privateMnemonic =
       'pluck view carry maid bamboo river major where dutch wood certain oval order wise awkward clerk adult summer because number raven coil crunch hat'
     const wallet = Wallet.fromMnemonic(privateMnemonic)
-    const evmosAddress = ethToEvmos(wallet.address)
+    const sender = await getSender(wallet)
 
-    const sender = await getSender(evmosAddress)
     const txSimple = createMessageSend(
       LOCALNET_CHAIN,
       sender,
@@ -35,7 +34,7 @@ describe('send transactions to the node', () => {
     )
     const resMM = await singTransactionUsingEIP712(
       wallet,
-      evmosAddress,
+      sender.accountAddress,
       txSimple,
     )
     const broadcastRes = await broadcast(resMM)
@@ -46,9 +45,8 @@ describe('send transactions to the node', () => {
     const privateMnemonic =
       'pluck view carry maid bamboo river major where dutch wood certain oval order wise awkward clerk adult summer because number raven coil crunch hat'
     const wallet = Wallet.fromMnemonic(privateMnemonic)
-    const evmosAddress = ethToEvmos(wallet.address)
 
-    const sender = await getSender(evmosAddress)
+    const sender = await getSender(wallet)
     const txSimple = createMessageSend(
       LOCALNET_CHAIN,
       sender,

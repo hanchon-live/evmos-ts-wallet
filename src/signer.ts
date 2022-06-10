@@ -16,6 +16,8 @@ import {
   createMessageSend,
   Chain,
 } from '@tharsis/transactions'
+import { signatureToPubkey } from '@hanchon/signature-to-pubkey'
+import { ethToEvmos } from '@tharsis/address-converter'
 
 // Chain helpers
 
@@ -59,7 +61,7 @@ interface AccountResponse {
     '@type': string
     base_account: {
       address: string
-      pub_key: {
+      pub_key?: {
         '@type': string
         key: string
       }
@@ -70,21 +72,36 @@ interface AccountResponse {
   }
 }
 
+export async function generatePubkey(wallet: Wallet) {
+  // Sign the personal message `generate_pubkey` and generate the pubkey from that signature
+  const signature = await wallet.signMessage('generate_pubkey')
+  return signatureToPubkey(
+    signature,
+    Buffer.from([
+      50, 215, 18, 245, 169, 63, 252, 16, 225, 169, 71, 95, 254, 165, 146, 216,
+      40, 162, 115, 78, 147, 125, 80, 182, 25, 69, 136, 250, 65, 200, 94, 178,
+    ]),
+  )
+}
+
 export async function getSender(
-  wallet: string,
+  wallet: Wallet,
   url: string = 'http://127.0.0.1:1317',
 ) {
+  const evmosAddress = ethToEvmos(wallet.address)
   const addrRequest = await fetch(
-    `${url}/cosmos/auth/v1beta1/accounts/${wallet}`,
+    `${url}/cosmos/auth/v1beta1/accounts/${evmosAddress}`,
   )
   const resp = (await addrRequest.json()) as AccountResponse
 
-  return {
-    accountAddress: wallet,
+  const sender = {
+    accountAddress: evmosAddress,
     sequence: parseInt(resp.account.base_account.sequence as string, 10),
     accountNumber: parseInt(resp.account.base_account.account_number, 10),
-    pubkey: resp.account.base_account.pub_key.key,
+    pubkey:
+      resp.account.base_account.pub_key?.key || (await generatePubkey(wallet)),
   }
+  return sender
 }
 
 // Broadcast a transaction in json.stringify format

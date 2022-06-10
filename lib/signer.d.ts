@@ -27,7 +27,8 @@ export declare const TESTNET_FEE: {
     denom: string;
     gas: string;
 };
-export declare function getSender(wallet: string, url?: string): Promise<{
+export declare function generatePubkey(wallet: Wallet): Promise<string>;
+export declare function getSender(wallet: Wallet, url?: string): Promise<{
     accountAddress: string;
     sequence: number;
     accountNumber: number;

@@ -31,30 +31,33 @@ Both `signing` functions have the optional parameter `broadcastMode` that by def
 import { Wallet } from "@ethersproject/wallet"
 import { createMessageSend } from "@tharsis/transactions"
 import { broadcast, getSender, LOCALNET_CHAIN, LOCALNET_FEE, signTransaction } from "@hanchon/evmos-ts-signer"
-import { ethToEvmos } from "@tharsis/address-converter"
 
 
 (async () => {
-  const privateMnemonic = 'pluck view carry maid bamboo river major where dutch wood certain oval order wise awkward clerk adult summer because number raven coil crunch hat'
-  const wallet = Wallet.fromMnemonic(privateMnemonic)
+    const privateMnemonic =
+      'pluck view carry maid bamboo river major where dutch wood certain oval order wise awkward clerk adult summer because number raven coil crunch hat'
+    const wallet = Wallet.fromMnemonic(privateMnemonic)
 
-  // Address formatted as evmos1...
-  const evmosAddress = ethToEvmos(wallet.address)
+    const sender = await getSender(wallet)
+    const txSimple = createMessageSend(
+      LOCALNET_CHAIN,
+      sender,
+      LOCALNET_FEE,
+      '',
+      {
+        destinationAddress: 'evmos1pmk2r32ssqwps42y3c9d4clqlca403yd9wymgr',
+        amount: '1',
+        denom: 'aevmos',
+      },
+    )
 
-  const sender = await getSender(evmosAddress)
-  let txSimple = createMessageSend(LOCALNET_CHAIN, sender, LOCALNET_FEE, '', {
-    destinationAddress: 'evmos1pmk2r32ssqwps42y3c9d4clqlca403yd9wymgr',
-    amount: '1',
-    denom: 'aevmos',
-  })
-
-  const resKeplr = await signTransaction(wallet, txSimple)
-  const broadcastRes = await broadcast(resKeplr)
-  if (broadcastRes.tx_response.code === 0) {
-      console.log('Success')
-  } else {
-      console.log('Error')
-  }
+    const resKeplr = await signTransaction(wallet, txSimple)
+    const broadcastRes = await broadcast(resKeplr)
+    if (broadcastRes.tx_response.code === 0) {
+        console.log('Success')
+    } else {
+        console.log('Error')
+    }
 })()
 
 ```
@@ -65,28 +68,44 @@ import { ethToEvmos } from "@tharsis/address-converter"
 import { Wallet } from "@ethersproject/wallet"
 import { createMessageSend } from "@tharsis/transactions"
 import { broadcast, getSender, LOCALNET_CHAIN, LOCALNET_FEE, singTransactionUsingEIP712 } from "@hanchon/evmos-ts-signer"
-import { ethToEvmos } from "@tharsis/address-converter"
 
 (async () => {
-  const privateMnemonic = 'pluck view carry maid bamboo river major where dutch wood certain oval order wise awkward clerk adult summer because number raven coil crunch hat'
-  const wallet = Wallet.fromMnemonic(privateMnemonic)
-  const evmosAddress = ethToEvmos(wallet.address)
+    const privateMnemonic =
+      'pluck view carry maid bamboo river major where dutch wood certain oval order wise awkward clerk adult summer because number raven coil crunch hat'
+    const wallet = Wallet.fromMnemonic(privateMnemonic)
+    const sender = await getSender(wallet)
 
-  const sender = await getSender(evmosAddress)
-  let txSimple = createMessageSend(LOCALNET_CHAIN, sender, LOCALNET_FEE, '', {
-    destinationAddress: 'evmos1pmk2r32ssqwps42y3c9d4clqlca403yd9wymgr',
-    amount: '1',
-    denom: 'aevmos',
-  })
-  const resMM = await singTransactionUsingEIP712(wallet, evmosAddress, txSimple)
-  const broadcastRes = await broadcast(resMM)
+    const txSimple = createMessageSend(
+      LOCALNET_CHAIN,
+      sender,
+      LOCALNET_FEE,
+      '',
+      {
+        destinationAddress: 'evmos1pmk2r32ssqwps42y3c9d4clqlca403yd9wymgr',
+        amount: '1',
+        denom: 'aevmos',
+      },
+    )
+
+    const resMM = await singTransactionUsingEIP712(
+      wallet,
+      sender.accountAddress,
+      txSimple,
+    )
+
+    const broadcastRes = await broadcast(resMM)
     if (broadcastRes.tx_response.code === 0) {
       console.log('Success')
-  } else {
+    } else {
       console.log('Error')
-  }
+    }
 })()
 ```
+
+## NOTE
+
+- If your wallet didn't get any transaction, it won't be registered in the blockchain and the `getSender` function will throw an error.
+- The `getSender` function should be called before sending each transaction to update the nonce or manually increment the value in the sender object.
 
 ## Dependencies
 
@@ -94,4 +113,4 @@ import { ethToEvmos } from "@tharsis/address-converter"
 - @metamask/eth-sig-util
 - @tharsis/proto
 - @tharsis/transactions
-- node-fetch (using `v2` that is limited but should work without enforcing `type:module`. In `src/helper.ts` there is a basic implementation of `fetch` and `post` that can be used to replace `node-fetch`, in case that lib is not working for your case)
+- node-fetch (using `v2` that is limited but should work without enforcing `ESM`. In `src/helper.ts` there is a basic implementation of `fetch` and `post` that can be used to replace `node-fetch`, in case that lib is not working for your case)

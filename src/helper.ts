@@ -1,5 +1,5 @@
 // In case node-fetch is not working for you, you can use this fetch and post implementation, axios is another option
-// I'm using node-fetch@2 that doesn't force type:module on package.json
+// I'm using node-fetch@2 that doesn't force ESM
 
 import { request as requestHttp } from 'http'
 import { request as requestHttps } from 'https'

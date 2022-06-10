@@ -1,4 +1,4 @@
-# Evmos TS Signer
+# Evmos TS Wallet
 
 Evmos ts/js wallet to sign and broadcast messages created with evmosjs
 

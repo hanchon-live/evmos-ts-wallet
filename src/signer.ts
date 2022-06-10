@@ -42,8 +42,8 @@ export const MAINNET_FEE = {
 }
 
 export const TESTNET_CHAIN = {
-  chainId: 9001,
-  cosmosChainId: 'evmos_9001-2',
+  chainId: 9000,
+  cosmosChainId: 'evmos_9000-4',
 }
 
 export const TESTNET_FEE = {

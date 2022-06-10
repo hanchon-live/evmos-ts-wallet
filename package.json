@@ -1,15 +1,21 @@
 {
-  "name": "ts-evmos-signer",
+  "name": "@hanchon/evmos-ts-wallet",
   "version": "0.1.0",
-  "description": "Typescript signer to sign evmosjs messages",
-  "main": "index.js",
+  "description": "Evmos ts/js wallet to sign and broadcast messages created with evmosjs",
+  "repository": "hanchon-live/evmos-ts-wallet",
+  "source": "src/signer.ts",
+  "main": "lib/signer.js",
+  "module": "./lib/signer.module.js",
+  "types": "lib/signer.d.ts",
+  "files": [
+    "lib/**/*"
+  ],
   "license": "MIT",
   "private": "false",
   "publishConfig": {
     "access": "public"
   },
   "author": "Guillermo Paoletti <guillermo.paoletti@gmail.com>",
-  "repository": "https://github.com/hanchon-live/ts-evmos-signer",
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix"
@@ -19,6 +25,7 @@
     ]
   },
   "scripts": {
+    "build": "microbundle",
     "test": "jest",
     "prepare": "husky install",
     "lint": "eslint -c './.eslintrc.js' './packages/**/*.{ts,js}'",
@@ -28,12 +35,17 @@
     "format:md": "yarn lint:md --fix"
   },
   "devDependencies": {
+    "@babel/core": "^7.18.2",
+    "@babel/preset-env": "^7.18.2",
+    "@babel/preset-typescript": "^7.17.12",
     "@commitlint/cli": "^16.2.0",
     "@commitlint/config-conventional": "^16.2.1",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.9.2",
+    "@types/node-fetch": "^2.6.1",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
+    "babel-jest": "^28.1.1",
     "cross-env": "^7.0.3",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
@@ -50,11 +62,21 @@
     "link-module-alias": "^1.2.0",
     "lint-staged": "^11.1.2",
     "markdownlint-cli": "^0.31.1",
+    "microbundle": "^0.15.0",
     "prettier": "^2.4.1",
     "shx": "^0.3.4",
     "ts-jest": "^27.0.5",
     "ts-node-dev": "^1.1.8",
     "tsconfig-paths": "^3.11.0",
     "typescript": "^4.4.3"
+  },
+  "dependencies": {
+    "@ethersproject/bytes": "^5.6.1",
+    "@ethersproject/wallet": "^5.6.2",
+    "@metamask/eth-sig-util": "^4.0.1",
+    "@tharsis/address-converter": "^0.1.8",
+    "@tharsis/proto": "^0.1.17",
+    "@tharsis/transactions": "^0.2.3",
+    "node-fetch": "2"
   }
 }

@@ -28,76 +28,73 @@ Both `signing` functions have the optional parameter `broadcastMode` that by def
 ## Example using keplr signature
 
 ```ts
-import { Wallet } from "@ethersproject/wallet"
-import { createMessageSend } from "@tharsis/transactions"
-import { broadcast, getSender, LOCALNET_CHAIN, LOCALNET_FEE, signTransaction } from "@hanchon/evmos-ts-wallet"
+import { Wallet } from '@ethersproject/wallet'
+import { createMessageSend } from '@tharsis/transactions'
+import {
+  broadcast,
+  getSender,
+  LOCALNET_CHAIN,
+  LOCALNET_FEE,
+  signTransaction,
+} from '@hanchon/evmos-ts-wallet'
+;(async () => {
+  const privateMnemonic =
+    'pluck view carry maid bamboo river major where dutch wood certain oval order wise awkward clerk adult summer because number raven coil crunch hat'
+  const wallet = Wallet.fromMnemonic(privateMnemonic)
 
+  const sender = await getSender(wallet)
+  const txSimple = createMessageSend(LOCALNET_CHAIN, sender, LOCALNET_FEE, '', {
+    destinationAddress: 'evmos1pmk2r32ssqwps42y3c9d4clqlca403yd9wymgr',
+    amount: '1',
+    denom: 'aevmos',
+  })
 
-(async () => {
-    const privateMnemonic =
-        'pluck view carry maid bamboo river major where dutch wood certain oval order wise awkward clerk adult summer because number raven coil crunch hat'
-    const wallet = Wallet.fromMnemonic(privateMnemonic)
-
-    const sender = await getSender(wallet)
-    const txSimple = createMessageSend(
-        LOCALNET_CHAIN,
-        sender,
-        LOCALNET_FEE,
-        '',
-        {
-            destinationAddress: 'evmos1pmk2r32ssqwps42y3c9d4clqlca403yd9wymgr',
-            amount: '1',
-            denom: 'aevmos',
-        },
-    )
-
-    const resKeplr = await signTransaction(wallet, txSimple)
-    const broadcastRes = await broadcast(resKeplr)
-    if (broadcastRes.tx_response.code === 0) {
-        console.log('Success')
-    } else {
-        console.log('Error')
-    }
+  const resKeplr = await signTransaction(wallet, txSimple)
+  const broadcastRes = await broadcast(resKeplr)
+  if (broadcastRes.tx_response.code === 0) {
+    console.log('Success')
+  } else {
+    console.log('Error')
+  }
 })()
 ```
 
 ## Example using eip712
 
 ```ts
-import { Wallet } from "@ethersproject/wallet"
-import { createMessageSend } from "@tharsis/transactions"
-import { broadcast, getSender, LOCALNET_CHAIN, LOCALNET_FEE, singTransactionUsingEIP712 } from "@hanchon/evmos-ts-wallet"
+import { Wallet } from '@ethersproject/wallet'
+import { createMessageSend } from '@tharsis/transactions'
+import {
+  broadcast,
+  getSender,
+  LOCALNET_CHAIN,
+  LOCALNET_FEE,
+  signTransactionUsingEIP712,
+} from '@hanchon/evmos-ts-wallet'
+;(async () => {
+  const privateMnemonic =
+    'pluck view carry maid bamboo river major where dutch wood certain oval order wise awkward clerk adult summer because number raven coil crunch hat'
+  const wallet = Wallet.fromMnemonic(privateMnemonic)
+  const sender = await getSender(wallet)
 
-(async () => {
-    const privateMnemonic =
-        'pluck view carry maid bamboo river major where dutch wood certain oval order wise awkward clerk adult summer because number raven coil crunch hat'
-    const wallet = Wallet.fromMnemonic(privateMnemonic)
-    const sender = await getSender(wallet)
+  const txSimple = createMessageSend(LOCALNET_CHAIN, sender, LOCALNET_FEE, '', {
+    destinationAddress: 'evmos1pmk2r32ssqwps42y3c9d4clqlca403yd9wymgr',
+    amount: '1',
+    denom: 'aevmos',
+  })
 
-    const txSimple = createMessageSend(
-        LOCALNET_CHAIN,
-        sender,
-        LOCALNET_FEE,
-        '',
-        {
-            destinationAddress: 'evmos1pmk2r32ssqwps42y3c9d4clqlca403yd9wymgr',
-            amount: '1',
-            denom: 'aevmos',
-        },
-    )
+  const resMM = await signTransactionUsingEIP712(
+    wallet,
+    sender.accountAddress,
+    txSimple,
+  )
 
-    const resMM = await singTransactionUsingEIP712(
-        wallet,
-        sender.accountAddress,
-        txSimple,
-    )
-
-    const broadcastRes = await broadcast(resMM)
-    if (broadcastRes.tx_response.code === 0) {
-        console.log('Success')
-    } else {
-        console.log('Error')
-    }
+  const broadcastRes = await broadcast(resMM)
+  if (broadcastRes.tx_response.code === 0) {
+    console.log('Success')
+  } else {
+    console.log('Error')
+  }
 })()
 ```
 

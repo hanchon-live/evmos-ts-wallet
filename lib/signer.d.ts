@@ -36,4 +36,4 @@ export declare function getSender(wallet: Wallet, url?: string): Promise<{
 }>;
 export declare function broadcast(transactionBody: string, url?: string): Promise<any>;
 export declare function signTransaction(wallet: Wallet, tx: TxGenerated, broadcastMode?: string): Promise<string>;
-export declare function singTransactionUsingEIP712(wallet: Wallet, sender: string, tx: TxGenerated, chain?: Chain, broadcastMode?: string): Promise<string>;
+export declare function signTransactionUsingEIP712(wallet: Wallet, sender: string, tx: TxGenerated, chain?: Chain, broadcastMode?: string): Promise<string>;

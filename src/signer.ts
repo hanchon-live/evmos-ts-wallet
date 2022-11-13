@@ -13,7 +13,6 @@ import {
   signatureToWeb3Extension,
   Sender,
   TxGenerated,
-  createMessageSend,
   Chain,
 } from '@tharsis/transactions'
 import { signatureToPubkey } from '@hanchon/signature-to-pubkey'
@@ -38,9 +37,9 @@ export const MAINNET_CHAIN = {
 }
 
 export const MAINNET_FEE = {
-  amount: '5000',
+  amount: '3000000000000000',
   denom: 'aevmos',
-  gas: '600000',
+  gas: '150000',
 }
 
 export const TESTNET_CHAIN = {
@@ -147,7 +146,7 @@ export async function signTransaction(
 }
 
 // Sign transaction using eip712 method (metamask style)
-export async function singTransactionUsingEIP712(
+export async function signTransactionUsingEIP712(
   wallet: Wallet,
   sender: string,
   tx: TxGenerated,
@@ -158,7 +157,7 @@ export async function singTransactionUsingEIP712(
     TypedDataUtils.eip712Hash(tx.eipToSign as any, SignTypedDataVersion.V4),
   )
   /* eslint-disable no-underscore-dangle */
-  const signatureRaw = await wallet._signingKey().signDigest(dataToSign)
+  const signatureRaw = wallet._signingKey().signDigest(dataToSign)
   const signature = joinSignature(signatureRaw)
 
   const extension = signatureToWeb3Extension(

@@ -6,7 +6,7 @@ import {
   LOCALNET_CHAIN,
   LOCALNET_FEE,
   signTransaction,
-  singTransactionUsingEIP712,
+  signTransactionUsingEIP712,
 } from './signer'
 // We are doing the test with broadcast block so it's going to take at least 6 seconds per transaction, that's why we need to change the timeout to something bigger
 // The block flag is required so the account sequence is updated between tests
@@ -32,7 +32,7 @@ describe('send transactions to the node', () => {
         denom: 'aevmos',
       },
     )
-    const resMM = await singTransactionUsingEIP712(
+    const resMM = await signTransactionUsingEIP712(
       wallet,
       sender.accountAddress,
       txSimple,
